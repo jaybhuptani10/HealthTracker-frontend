@@ -1,10 +1,14 @@
 import React from "react";
+import Home from "./Page/Home";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
-    <div className="h-screen w-full">
-      <p className="text-white">hy</p>hello
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
