@@ -124,7 +124,7 @@ const Navbar = () => {
         place="right"
         effect="solid"
         delayShow={100}
-        className="bg-gray-700 text-white p-2 rounded-md text-sm shadow-md"
+        className="bg-gray-700 text-white p-2 z-50 rounded-md text-sm shadow-md"
       />
     </div>
   );
