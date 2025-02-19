@@ -1,18 +1,19 @@
 import React from "react";
 import { RadialBarChart, RadialBar, PolarAngleAxis } from "recharts";
 
+import img from "./img.png";
 const StepCounterComp = () => {
   const data = [{ name: "Score", value: 75, fill: "#8338EC" }];
   return (
-    <div className="h-66 w-66 bg-[#EAF1F3] flex items-center justify-center relative rounded-2xl cursor-pointer">
+    <div className="h-[60%] w-full bg-[#EAF1F3] flex items-center justify-center relative rounded-2xl cursor-pointer">
       <RadialBarChart
         className="absolute"
         width={500}
         height={400}
-        cx={240}
-        cy={210}
-        innerRadius={210}
-        outerRadius={220}
+        cx={250}
+        cy={230}
+        innerRadius={170}
+        outerRadius={180}
         startAngle={220}
         endAngle={-40}
         barSize={15}
@@ -35,6 +36,12 @@ const StepCounterComp = () => {
       <h1 className="absolute text-4xl">8,000</h1>
       <span className="absolute text-xl text-gray-500 mt-16">Steps</span>
       <h1 className="absolute bottom-10 text-xl text-gray-500">10,000 steps</h1>
+
+      {/* <img
+        src={img}
+        className="h-full object-cover w-full absolute top-0 left-0"
+        alt=""
+      /> */}
     </div>
   );
 };
