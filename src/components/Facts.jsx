@@ -28,7 +28,7 @@ const Facts = () => {
   }, []);
 
   return (
-    <div className="p-4 flex flex-col gap-4  rounded-lg shadow-lg w-full mx-auto mt-10">
+    <div className="p-4 flex flex-col gap-10 h-[60%] sm:h-full rounded-lg shadow-lg w-full sm:w-[50%] mx-auto">
       <h2 className="text-xl font-bold text-center text-blue-600">
         Health Facts
       </h2>

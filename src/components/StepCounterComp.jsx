@@ -3,9 +3,9 @@ import { RadialBarChart, RadialBar, PolarAngleAxis } from "recharts";
 
 import img from "./img.png";
 const StepCounterComp = () => {
-  const data = [{ name: "Score", value: 75, fill: "#8338EC" }];
+  const data = [{ name: "Score", value: 30, fill: "#8338EC" }];
   return (
-    <div className="h-[60%] w-full bg-[#EAF1F3] flex items-center justify-center relative rounded-2xl cursor-pointer">
+    <div className="h-[30%] sm:h-[30%] w-full bg-[#EAF1F3] flex items-center justify-center relative rounded-2xl cursor-pointer">
       <RadialBarChart
         className="absolute"
         width={500}

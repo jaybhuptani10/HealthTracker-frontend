@@ -30,7 +30,7 @@ const HeartRate = () => {
   }, []);
 
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="h-[50vh] sm:h-full  w-full flex flex-col items-center justify-center relative overflow-hidden">
       {/* Heart Image */}
       <img
         src={img}
