@@ -18,7 +18,7 @@ const Home = () => {
           </div>
           <StepCounterComp />
         </div>
-        <div className="h-[60%] w-[45%] overflow-hidden">
+        <div className="h-[60%] w-[45%] overflow-hidden ">
           <HeartRate />
         </div>
         <div className="h-[60%] w-[25%] "></div>
