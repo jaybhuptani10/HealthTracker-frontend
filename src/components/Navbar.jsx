@@ -23,23 +23,23 @@ const Navbar = () => {
   return (
     <div>
       {/* Hamburger Icon for Mobile */}
-      <div className="md:hidden p-4 flex justify-between items-center">
+      <div className="md:hidden z-50 flex justify-between items-center">
         <GiHamburgerMenu
-          className="text-black h-8 w-8 cursor-pointer"
+          className="text-black h-8 w-8 cursor-pointer absolute top-2 left-5"
           onClick={() => setIsOpen(true)}
         />
       </div>
 
       {/* Sidebar */}
       <div
-        className={`bg-[#e6e9d9] text-white h-screen md:h-[90vh] w-[60vw] md:w-[4vw] rounded-2xl py-5 gap-5 flex flex-col items-center justify-between transition-all duration-300 fixed top-0 left-0 ${
+        className={`bg-[#e6e9d9] text-white h-screen md:h-[90vh] w-[20vw] md:w-[4vw] rounded-2xl py-5 gap-5 flex flex-col items-center justify-between transition-all duration-300 fixed top-0 left-0 z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:relative md:flex`}
       >
         {/* Close Button for Mobile */}
         <div className="md:hidden w-full flex justify-end p-4">
           <IoMdClose
-            className="text-black h-8 w-8 cursor-pointer"
+            className="text-black h-8 w-8 cursor-pointer absolute top-2 right-5"
             onClick={() => setIsOpen(false)}
           />
         </div>

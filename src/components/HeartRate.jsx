@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { LineChart, Line, YAxis, XAxis, ResponsiveContainer } from "recharts";
-import img from "./heart.png";
+import img from "./heart-3.png";
 
 const HeartRate = () => {
   const [data, setData] = useState([]);
@@ -32,10 +32,14 @@ const HeartRate = () => {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden">
       {/* Heart Image */}
-      <img src={img} className="h-full w-[100%] object-cover" alt="Heart" />
+      <img
+        src={img}
+        className="h-full w-full sm:w-[70%] object-cover"
+        alt="Heart"
+      />
 
       {/* Bottom Floating Card */}
-      <div className="h-[25%] w-full absolute bottom-0 bg-white/70 rounded-2xl flex items-center justify-between px-4 overflow-hidden backdrop-blur-md">
+      <div className="h-[35%] w-full absolute bottom-0 bg-white/70 rounded-2xl flex items-center justify-between px-4 overflow-hidden backdrop-blur-md">
         <div>
           <h1 className="text-lg font-semibold text-gray-800">Heart Rate</h1>
           <p className="text-sm text-gray-500">124 bpm</p>

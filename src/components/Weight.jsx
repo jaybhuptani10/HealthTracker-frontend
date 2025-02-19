@@ -30,15 +30,15 @@ const Weight = () => {
         <h1 className="text-xl">Weight</h1>
         <span className="text-sm text-gray-500 mt-6">Lost 4Kg</span>
       </div>
-      <div className="h-full w-full flex  items-end gap-2 ">
+      <div className="h-full w-full flex flex-col sm:flex-row  items-center gap-2 ">
         <LineChart width={80} height={50} data={data}>
           <YAxis domain={[91, 93]} hide />{" "}
           {/* Adjust Y-Axis to control up-down range */}
           <Tooltip content={<CustomTooltip />} />
           <Line type="monotone" dataKey="uv" stroke="#000" dot={true} />
         </LineChart>
-        <h1 className="bg-white p-2 h-10 w-12 rounded-2xl text-md text-center leading-3 flex flex-col">
-          90 <span className="text-xs ml-2">kg</span>
+        <h1 className="bg-white p-2 h-10 w-full sm:w-12 rounded-2xl text-md text-center leading-3 flex flex-row sm:flex-col items-center justify-center">
+          90 <span className="text-xs ml-0.5 mt-0.5 sm:ml-2 sm:mt-0">kg</span>
         </h1>
       </div>
     </div>

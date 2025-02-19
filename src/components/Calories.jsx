@@ -29,15 +29,16 @@ const Calories = () => {
       <div>
         <h1 className="text-xl">Calories Burnt</h1>
       </div>
-      <div className="h-full w-full flex  items-end gap-2 ">
+      <div className="h-full w-full flex flex-col sm:flex-row  items-center gap-2">
         <LineChart width={80} height={50} data={data}>
           <YAxis domain={[1500, 2200]} hide />{" "}
           {/* Adjust Y-Axis to control up-down range */}
           <Tooltip content={<CustomTooltip />} />
           <Line type="monotone" dataKey="uv" stroke="#000" dot={true} />
         </LineChart>
-        <h1 className="bg-white p-1 h-10 w-12 flex flex-col items-center justify-center rounded-2xl text-md text-center leading-3 relative">
-          1899 <span className="text-xs ml-2">cal</span>
+        <h1 className="bg-white p-2 h-10 w-full sm:w-12 rounded-2xl text-md text-center leading-3 flex flex-row sm:flex-col items-center justify-center">
+          1899{" "}
+          <span className="text-xs ml-0.5 mt-0.5 sm:ml-2 sm:mt-0">cal</span>
         </h1>
       </div>
     </div>
