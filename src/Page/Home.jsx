@@ -11,7 +11,7 @@ import HealthStatus from "../components/HealthStatus";
 const Home = () => {
   return (
     <div className="min-h-screen w-full p-10 flex  ">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="sm:ml-10  h-screen w-full flex flex-col sm:flex-row gap-5 sm:gap-8 mb-10 ">
         <div className="flex flex-col gap-5 w-full sm:w-[30%] min-h-[100vh] sm:min-h-[120vh]">
           <div className="flex h-[30%] sm:h-[20%] gap-5">
@@ -19,6 +19,7 @@ const Home = () => {
             <Calories />
           </div>
           <StepCounterComp />
+          
           <div className="h-[30vh] sm:h-[50vh] w-full sm:w-[100%] flex gap-2">
             <HealthStatus />
             <HealthStatus />
