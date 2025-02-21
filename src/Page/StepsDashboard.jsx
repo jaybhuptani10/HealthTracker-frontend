@@ -4,6 +4,7 @@ import { Card, CardContent } from "../components/ui/Card.jsx";
 import { Progress } from "../components/ui/Progress.jsx";
 import { Calendar } from "../components/ui/Calendar.jsx";
 
+
 const generateDummyData = () => {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const data = {};
@@ -50,7 +51,7 @@ export default function StepsDashboard() {
           <h2 className="text-xl font-semibold">Daily Steps</h2>
           <p className="text-3xl font-bold">{dailySteps}</p>
           <Progress value={(dailySteps / goal) * 100} className="mt-2" />
-          
+          <p className="text-sm text-gray-500">Goal: {goal} steps</p>
         </CardContent>
       </Card>
 
@@ -65,13 +66,14 @@ export default function StepsDashboard() {
       <Card>
         <CardContent>
         <h2 className="text-xl font-semibold">Set Your Goal</h2>
+        <br />
         <input
             type="number"
             className="mt-2 border p-1 w-full"
             value={goal}
             onChange={(e) => setGoal(Number(e.target.value))}
           />
-          <p className="text-sm text-gray-500">Goal: {goal} steps</p>
+          <br/>          
         </CardContent>
       </Card>
       

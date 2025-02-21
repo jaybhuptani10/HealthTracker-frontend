@@ -73,14 +73,14 @@ export function Calendar({ selected, onSelect }) {
       {/* {selectedDate.toLocaleString('default', { month: 'long', year: 'numeric' })} */}
       <div className="flex justify-between items-center mb-4 px-3">
         <button 
-          onClick={() => changeMonth(-1)} 
+          onClick={() => handlePrevMonth()} 
           className="px-3 py-1 text-base cursor-pointer bg-gray-200 hover:bg-gray-300 rounded"
         >
           &lt; 
         </button>
         <h2 className="text-xl font-semibold">{selectedDate.toLocaleString('default', { month: 'long', year: 'numeric' })}</h2>
         <button 
-          onClick={() => changeMonth(1)} 
+          onClick={() => handleNextMonth()} 
           className="px-3 py-1 text-base cursor-pointer bg-gray-200 hover:bg-gray-300 rounded"
         >
          &gt;
