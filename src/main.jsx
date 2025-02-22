@@ -2,15 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./Page/Home.jsx";
 import StepsDashboard from "./Page/StepsDashboard.jsx";
 import Register from "./Page/Authentication/Register.jsx";
 import Model from "./MODEL/Model.jsx";
+import ProtectedRoute from "./Page/Authentication/ProtectedRoute.jsx"; // Import the ProtectedRoute
 
 const router = createBrowserRouter([
   {
@@ -18,20 +15,25 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/steps",
-        element: <StepsDashboard />,
-      },
-      {
         path: "/authentication",
         element: <Register />,
       },
       {
-        path: "/model",
-        element: <Model />,
+        element: <ProtectedRoute />, // Wrap protected routes
+        children: [
+          {
+            path: "/",
+            element: <Home />,
+          },
+          {
+            path: "/steps",
+            element: <StepsDashboard />,
+          },
+          {
+            path: "/model",
+            element: <Model />,
+          },
+        ],
       },
     ],
   },
