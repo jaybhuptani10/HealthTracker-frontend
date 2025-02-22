@@ -4,13 +4,17 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import FitnessDashboard from "./Page/FitnessDashboard";
 import StepsDashboard from "./Page/StepsDashboard";
 import Navbar from "./components/Navbar";
+import axios from "axios";
 
+axios.defaults.baseURL =
+  "http://localhost:4000/" || "https://health-tracker-backend-jet.vercel.app/";
+axios.defaults.withCredentials = true;
 
 const App = () => {
   return (
     <div className="min-h-screen w-full p-10 flex">
       <Navbar />
-      <Outlet/>
+      <Outlet />
     </div>
     // <BrowserRouter>
     //   <Routes>

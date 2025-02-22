@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         element: <StepsDashboard />,
       },
       {
-        path: "/register",
+        path: "/authentication",
         element: <Register />,
       },
       {
