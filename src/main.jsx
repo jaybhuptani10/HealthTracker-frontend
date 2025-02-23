@@ -8,6 +8,7 @@ import StepsDashboard from "./Page/StepsDashboard.jsx";
 import Register from "./Page/Authentication/Register.jsx";
 import Model from "./MODEL/Model.jsx";
 import ProtectedRoute from "./Page/Authentication/ProtectedRoute.jsx"; // Import the ProtectedRoute
+import SensorData from "./sensordata/SensorData.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
           {
             path: "/model",
             element: <Model />,
+          },
+          {
+            path: "/sensor",
+            element: <SensorData />,
           },
         ],
       },
