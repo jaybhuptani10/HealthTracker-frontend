@@ -7,7 +7,7 @@ const HealthStatus = () => {
       <div className=""></div>
       <CiLocationArrow1 className="absolute right-3 top-3 bg-[#EAF1F3] rounded-xl h-8 p-1 w-8" />
       <img
-        className="h-[40%] sm:h-[30%] sm:w-[55%] object-cover "
+        className="h-[40%] sm:h-[20%] sm:w-[45%] object-cover "
         src={img}
         alt=""
       />

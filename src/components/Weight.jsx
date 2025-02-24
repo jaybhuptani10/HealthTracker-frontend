@@ -25,7 +25,7 @@ const Weight = () => {
   };
 
   return (
-    <div className="h-[100%] w-[50%] bg-[#EAF1F3] flex p-5 relative rounded-2xl cursor-pointer flex-col overflow-hidden">
+    <div className="h-[100%] w-[50%] bg-[#ffffff] flex p-5 relative rounded-2xl cursor-pointer flex-col overflow-hidden">
       <div>
         <h1 className="text-xl">Weight</h1>
         <span className="text-sm text-gray-500 mt-6">Lost 4Kg</span>

@@ -11,6 +11,7 @@ import ProtectedRoute from "./Page/Authentication/ProtectedRoute.jsx"; // Import
 import SensorData from "./sensordata/SensorData.jsx";
 
 import HeartRateDashboard from "./Page/HeartrateDashboard.jsx";
+import UserDashboard from "./Page/UserDashboard.jsx";
 import WeightDashboard from "./Page/WeightDashboard.jsx";
 import CalorieDashboard from "./Page/CalorieDashboard.jsx";
 import SleepDashboard from "./Page/SleepDashboard.jsx";
@@ -47,18 +48,6 @@ const router = createBrowserRouter([
             path: "/heartrate",
             element: <HeartRateDashboard />,
           },
-          {
-            path:"/weightdashboard",
-            element: <WeightDashboard />
-          },
-          {
-            path: "/caloriedashboard",
-            element: <CalorieDashboard />,
-          },
-          {
-            path: "/sleepdashboard",
-            element: <SleepDashboard />,
-          }
         ],
       },
     ],

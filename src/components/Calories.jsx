@@ -25,7 +25,7 @@ const Calories = () => {
   };
 
   return (
-    <div className="h-[100%] w-[50%] bg-[#EAF1F3] flex p-5 relative rounded-2xl cursor-pointer flex-col overflow-hidden">
+    <div className="h-[100%] w-[50%] bg-[#ffffff] flex p-5 relative rounded-2xl cursor-pointer flex-col overflow-hidden">
       <div>
         <h1 className="text-xl">Calories Burnt</h1>
       </div>

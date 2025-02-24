@@ -8,6 +8,8 @@ import HeartRate from "../components/HeartRate";
 import Facts from "../components/Facts";
 import HealthStatus from "../components/HealthStatus";
 import { useLocation, useNavigate } from "react-router-dom";
+import SleepStatus from "../components/SleepStatus";
+import Sleep from "../components/Sleep";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const Home = () => {
 
           <div className="h-[30vh] sm:h-[50vh] w-full sm:w-[100%] flex gap-2">
             <HealthStatus />
-            <HealthStatus />
+            <SleepStatus />
           </div>
         </div>
         <div className=" w-full flex gap-5 min-h-[100vh] sm:min-h-[105vh] flex-col ">
@@ -40,12 +42,14 @@ const Home = () => {
           </div>
           <div className="w-full border-2 border-gray-400 h-fit sm:min-h-[50vh] mt-6  rounded-3xl">
             <div className="h-80% w-full flex-col sm:flex-row flex gap-2 p-3">
-              <div className="h-[30vh] w-full rounded-2xl sm:w-[33.33%] bg-[#EAF1F3]"></div>
-              <div className="h-[30vh] rounded-2xl w-full sm:w-[33.33%] bg-[#EAF1F3]"></div>
-              <div className="h-[30vh] rounded-2xl w-full sm:w-[33.33%] bg-[#EAF1F3]"></div>
+              <div className="h-[30vh] w-full rounded-2xl sm:w-[33.33%] bg-[#fff]"></div>
+              <div className="h-[30vh] rounded-2xl w-full sm:w-[33.33%] bg-[#fff]"></div>
+              <div className="h-[30vh] rounded-2xl w-full sm:w-[33.33%] bg-[#fff]"></div>
             </div>
             <div className="h-20% p-3">
-              <div className="h-[13vh] rounded-3xl w-full border-2 border-gray-400"></div>
+              <div className="h-[13vh] rounded-3xl w-full border-2 border-gray-400">
+                <Sleep />
+              </div>
             </div>
           </div>
         </div>

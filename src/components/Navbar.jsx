@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CiSearch, CiSettings } from "react-icons/ci";
 import { HiOutlineHome } from "react-icons/hi2";
 import { IoFitnessOutline } from "react-icons/io5";
@@ -12,121 +12,101 @@ import { Tooltip } from "react-tooltip";
 import { TfiAnnouncement } from "react-icons/tfi";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const getActiveClass = (path) =>
     location.pathname === path
-      ? "bg-[#566246] text-white"
-      : "hover:bg-[#C0BABC]";
+      ? "bg-black text-white"
+      : "hover:bg-gray-300 transition-all duration-300";
 
   return (
-    <div>
-      {/* Hamburger Icon for Mobile */}
-      <div className="md:hidden z-50 flex justify-between items-center">
+    <>
+      {/* Mobile Menu Button */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
         <GiHamburgerMenu
-          className="text-black h-8 w-8 cursor-pointer absolute top-2 left-5"
+          className="text-black h-8 w-8 cursor-pointer"
           onClick={() => setIsOpen(true)}
         />
       </div>
 
       {/* Sidebar */}
       <div
-        className={`bg-[#e6e9d9] text-white h-screen md:h-[90vh] w-[20vw] md:w-[4vw] rounded-2xl py-5 gap-5 flex flex-col items-center justify-between transition-all duration-300 fixed top-0 left-0 z-50 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:relative md:flex`}
+        className={`fixed top-1/2 -left-10 sm:left-10 transform -translate-y-1/2 flex flex-col items-center bg-gray-100 p-3 rounded-3xl shadow-lg h-[80vh] w-16 gap-4 justify-between transition-all duration-300 md:translate-x-0 z-50
+          ${isOpen ? "translate-x-12" : "-translate-x-full"} md:flex`}
       >
         {/* Close Button for Mobile */}
-        <div className="md:hidden w-full flex justify-end p-4">
+        <div className="md:hidden w-full flex justify-end p-2">
           <IoMdClose
-            className="text-black h-8 w-8 cursor-pointer absolute top-2 right-5"
+            className="text-black h-8 w-8 cursor-pointer"
             onClick={() => setIsOpen(false)}
           />
         </div>
 
-        {/* Profile & Search */}
-        <div className="flex flex-col gap-5 items-center w-full">
-          <div className="profile cursor-pointer border p-1 bg-white border-white rounded-full">
-            <img
-              className="rounded-full h-12 w-12 object-cover object-center"
-              src="https://images.unsplash.com/photo-1738332465678-be640ebb3a82?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Profile"
-            />
+        {/* Top Section */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="bg-black text-white p-3 rounded-full cursor-pointer">
+            <HiOutlineHome size={24} onClick={() => navigate("/")} />
           </div>
-          <div className="h-10 w-11 bg-[#b1b1ad] rounded-xl flex items-center justify-center p-1 cursor-pointer">
-            <CiSearch
-              className="h-5 w-5 text-black"
-              data-tooltip-id="tooltip"
-              data-tooltip-content="Search"
-            />
-          </div>
-        </div>
-
-        {/* Navigation Icons */}
-        <div className="flex flex-col gap-5 items-center w-full">
-          <HiOutlineHome
-            className={`h-8 w-8 md:w-12 text-black cursor-pointer rounded-lg p-1 transition-all duration-300 ${getActiveClass(
-              "/"
-            )}`}
-            data-tooltip-id="tooltip"
-            data-tooltip-content="Home"
-          />
-          <IoFitnessOutline
-            className={`h-8 w-8 md:w-12 text-black cursor-pointer rounded-lg p-1 transition-all duration-300 ${getActiveClass(
-              "/fitness"
-            )}`}
+          <div
+            className={`p-3 rounded-full ${getActiveClass("/fitness")}`}
             data-tooltip-id="tooltip"
             data-tooltip-content="Fitness"
-          />
-          <GoChecklist
-            className={`h-8 w-8 md:w-12 text-black cursor-pointer rounded-lg p-1 transition-all duration-300 ${getActiveClass(
+          >
+            <IoFitnessOutline size={24} className="cursor-pointer" />
+          </div>
+          <div
+            className={`p-3 cursor-pointer rounded-full cursor-pointer${getActiveClass(
               "/checklist"
             )}`}
             data-tooltip-id="tooltip"
             data-tooltip-content="Checklist"
-          />
+          >
+            <GoChecklist className="cursor-pointer" size={24} />
+          </div>
         </div>
 
-        {/* Profile & Notifications */}
-        <div className="flex flex-col gap-5 items-center w-full mt-10">
-          <IoMdNotificationsOutline
-            className={`h-8 w-8 md:w-12 text-black cursor-pointer rounded-lg p-1 transition-all duration-300 ${getActiveClass(
-              "/notifications"
-            )}`}
+        {/* Middle Section */}
+        <div className="relative">
+          <div
+            className="p-3 rounded-full hover:bg-gray-300 cursor-pointer"
             data-tooltip-id="tooltip"
             data-tooltip-content="Notifications"
-          />
-          <TfiAnnouncement
-            className={`h-8 w-8 md:w-12 text-black cursor-pointer rounded-lg p-1 transition-all duration-300 ${getActiveClass(
-              "/notifications"
-            )}`}
-            data-tooltip-id="tooltip"
-            data-tooltip-content="Announcements"
-          />
+          >
+            <IoMdNotificationsOutline size={24} />
+          </div>
+          <span className="absolute top-1 right-2 bg-red-500 w-2 h-2 rounded-full"></span>
         </div>
 
-        {/* Settings */}
-        <div className="flex flex-col items-center w-full gap-2">
-          <hr className="w-10 border-black" />
-          <CiSettings
-            className={`h-10 w-8 md:w-12 text-black cursor-pointer hover:text-gray-600 transition-all duration-300 ${getActiveClass(
-              "/settings"
-            )}`}
+        {/* Bottom Section */}
+        <div className="flex flex-col items-center gap-4">
+          <div
+            className="p-3 rounded-full hover:bg-gray-300"
             data-tooltip-id="tooltip"
             data-tooltip-content="Settings"
-          />
+          >
+            <CiSettings size={24} className="cursor-pointer" />
+          </div>
+          <div className="bg-white p-1 rounded-full shadow-md cursor-pointer">
+            <img
+              src="https://plus.unsplash.com/premium_photo-1700353612860-bd8ab8d71f05?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              className="h-12 w-12 rounded-full object-cover"
+              alt="Profile"
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Tooltip Component */}
-      <Tooltip
-        id="tooltip"
-        place="right"
-        effect="solid"
-        delayShow={100}
-        className="bg-gray-700 text-white p-2 z-50 rounded-md text-sm shadow-md"
-      />
-    </div>
+        {/* Tooltip Component */}
+        <Tooltip
+          id="tooltip"
+          place="right"
+          effect="solid"
+          delayShow={100}
+          className="bg-gray-700 text-white p-2 z-50 rounded-md text-sm shadow-md"
+        />
+      </div>
+    </>
   );
 };
 
