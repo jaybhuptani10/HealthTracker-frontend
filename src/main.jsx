@@ -10,6 +10,8 @@ import Model from "./MODEL/Model.jsx";
 import ProtectedRoute from "./Page/Authentication/ProtectedRoute.jsx"; // Import the ProtectedRoute
 import SensorData from "./sensordata/SensorData.jsx";
 
+import HeartRateDashboard from "./Page/HeartrateDashboard.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -37,6 +39,10 @@ const router = createBrowserRouter([
           {
             path: "/sensor",
             element: <SensorData />,
+          },
+          {
+            path: "/heartrate",
+            element: <HeartRateDashboard />,
           },
         ],
       },

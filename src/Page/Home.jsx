@@ -1,14 +1,16 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-
+import { CiLocationArrow1 } from "react-icons/ci";
 import StepCounterComp from "../components/StepCounterComp";
 import Weight from "../components/Weight";
 import Calories from "../components/Calories";
 import HeartRate from "../components/HeartRate";
 import Facts from "../components/Facts";
 import HealthStatus from "../components/HealthStatus";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen w-full p-10 flex ">
       {/* <Navbar /> */}
@@ -18,7 +20,13 @@ const Home = () => {
             <Weight />
             <Calories />
           </div>
-          <StepCounterComp />
+          <div className="h-[30%] sm:h-[30%] w-full relative">
+            <CiLocationArrow1
+              onClick={() => navigate("/steps")}
+              className="absolute right-3 top-3 z-50 bg-[#EAF1F3] rounded-xl h-8 p-1 w-8 cursor-pointer"
+            />
+            <StepCounterComp />
+          </div>
 
           <div className="h-[30vh] sm:h-[50vh] w-full sm:w-[100%] flex gap-2">
             <HealthStatus />
