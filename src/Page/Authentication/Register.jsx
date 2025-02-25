@@ -53,29 +53,153 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Current step:", currentStep);
+    console.log("Form data:", formData);
+  
     if (!isLogin && currentStep < 4) {
+      // Validate fields for each step before proceeding
+      switch (currentStep) {
+        case 1:
+          if (!formData.username || !formData.email || !formData.password) {
+            notify("Please fill in all fields on this page", "error");
+            return;
+          }
+          // Password validation
+          const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+          if (!passwordRegex.test(formData.password)) {
+            notify(
+              "Password must be at least 6 characters long and include uppercase, lowercase, numbers, and symbols.",
+              "warn"
+            );
+            return;
+          }
+          break;
+  
+        case 2:
+          if (!formData.phoneNumber || !formData.weight || !formData.height || !formData.gender || !formData.age) {
+            notify("Please fill in all fields on this page", "error");
+            return;
+          }
+          
+          // Phone number validation - must be exactly 10 digits
+          const phoneRegex = /^[0-9]{10}$/;
+          if (!phoneRegex.test(formData.phoneNumber)) {
+            notify("Phone number must be exactly 10 digits", "error");
+            return;
+          }
+          
+          // Additional validation for numeric fields
+          if (parseInt(formData.age) <= 0 || parseInt(formData.weight) <= 0 || parseInt(formData.height) <= 0) {
+            notify("Please enter valid numbers for age, weight, and height", "error");
+            return;
+          }
+          break;
+  
+        case 3:
+          console.log("Validating guardian information");
+          
+          // Validate Guardian 1 (required)
+          if (!formData.g1name || !formData.g1phone || !formData.g1email) {
+            notify("Please fill in all fields for Guardian 1", "error");
+            return;
+          }
+          
+          // Validate Guardian 2 (required)
+          if (!formData.g2name || !formData.g2phone || !formData.g2email) {
+            notify("Please fill in all fields for Guardian 2", "error");
+            return;
+          }
+          
+          try {
+            // Phone number validation for guardians - must be exactly 10 digits
+            const phoneRegex = /^[0-9]{10}$/;
+            console.log("G1 phone test:", phoneRegex.test(formData.g1phone));
+            console.log("G2 phone test:", phoneRegex.test(formData.g2phone));
+            
+            if (!phoneRegex.test(formData.g1phone)) {
+              notify("Guardian 1 phone number must be exactly 10 digits", "error");
+              return;
+            }
+            if (!phoneRegex.test(formData.g2phone)) {
+              notify("Guardian 2 phone number must be exactly 10 digits", "error");
+              return;
+            }
+            
+            // Email validation for guardians
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            console.log("G1 email test:", emailRegex.test(formData.g1email));
+            console.log("G2 email test:", emailRegex.test(formData.g2email));
+            
+            if (!emailRegex.test(formData.g1email)) {
+              notify("Please enter a valid email for Guardian 1", "error");
+              return;
+            }
+            if (!emailRegex.test(formData.g2email)) {
+              notify("Please enter a valid email for Guardian 2", "error");
+              return;
+            }
+            
+            // Check that Guardian 1 and Guardian 2 have different phone numbers and emails
+            if (formData.g1phone === formData.g2phone) {
+              notify("Guardian 1 and Guardian 2 must have different phone numbers", "error");
+              return;
+            }
+            if (formData.g1email === formData.g2email) {
+              notify("Guardian 1 and Guardian 2 must have different email addresses", "error");
+              return;
+            }
+            
+            console.log("All guardian validations passed!");
+          } catch (validationError) {
+            console.error("Validation error:", validationError);
+            notify("Error during validation. Please check console.", "error");
+            return;
+          }
+          break;
+      }
+      
+      console.log("Proceeding to next step");
       setCurrentStep((prev) => prev + 1);
       return;
     }
-
+  
     try {
       if (isLogin) {
         if (!formData.email || !formData.password) {
           notify("Please fill in all fields", "warn");
           return;
         }
-        // Handle login
         const response = await axios.post("/user/login", {
           email: formData.email,
           password: formData.password,
         });
         const { token, user } = response.data;
-        localStorage.setItem("authToken", token); // Store token in local storage
+        localStorage.setItem("authToken", token);
         notify("Login successful!", "success");
         setTimeout(() => {
           navigate("/");
         }, 1000);
       } else {
+        // Final validation before registration
+        if (!formData.doc || !formData.docphone || !formData.docemail) {
+          notify("Please fill in all doctor details", "error");
+          return;
+        }
+        
+        // Validate doctor phone number - must be exactly 10 digits
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(formData.docphone)) {
+          notify("Doctor's phone number must be exactly 10 digits", "error");
+          return;
+        }
+        
+        // Validate doctor email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.docemail)) {
+          notify("Please enter a valid email for your doctor", "error");
+          return;
+        }
+  
         const response = await axios.post("/user/register", formData);
         console.log("Registration successful:", response.data);
         const { token, user } = response.data;
@@ -86,10 +210,7 @@ const Register = () => {
         }, 1000);
       }
     } catch (error) {
-      console.error(
-        "Error:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error:", error.response ? error.response.data : error.message);
       notify("An error occurred. Please try again.", "error");
     }
   };
@@ -99,7 +220,7 @@ const Register = () => {
       setCurrentStep((prev) => prev - 1);
     }
   };
-
+  
   const renderLoginForm = () => (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
@@ -419,7 +540,7 @@ const Register = () => {
         </div>
 
         {isLogin ? (
-          renderLoginForm()
+          renderLoginForm() 
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex justify-between mb-6">
