@@ -14,6 +14,7 @@ import HeartRateDashboard from "./Page/HeartrateDashboard.jsx";
 import WeightDashboard from "./Page/WeightDashboard.jsx";
 import CalorieDashboard from "./Page/CalorieDashboard.jsx";
 import SleepDashboard from "./Page/SleepDashboard.jsx";
+import UserDashboard from "./Page/UserDashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
           {
             path: "/sleepdashboard",
             element: <SleepDashboard />,
+          },
+          {
+            path: "/userdashboard",
+            element: <UserDashboard />,
           },
         ],
       },
