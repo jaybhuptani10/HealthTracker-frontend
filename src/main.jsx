@@ -9,12 +9,14 @@ import Register from "./Page/Authentication/Register.jsx";
 import Model from "./MODEL/Model.jsx";
 import ProtectedRoute from "./Page/Authentication/ProtectedRoute.jsx"; // Import the ProtectedRoute
 import SensorData from "./sensordata/SensorData.jsx";
-
 import HeartRateDashboard from "./Page/HeartrateDashboard.jsx";
 import WeightDashboard from "./Page/WeightDashboard.jsx";
 import CalorieDashboard from "./Page/CalorieDashboard.jsx";
 import SleepDashboard from "./Page/SleepDashboard.jsx";
 import UserDashboard from "./Page/UserDashboard.jsx";
+import SpO2Dashboard from "./Page/O2.jsx"; // Import the new SpO2 dashboard
+import Checklist from "./Page/Checklist.jsx"; // Import the Checklist page
+import MedicalRecords from "./Page/MedicalRecords.jsx"; // Import the MedicalRecords page
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,18 @@ const router = createBrowserRouter([
           {
             path: "/userdashboard",
             element: <UserDashboard />,
+          },
+          {
+            path: "/spo2dashboard",
+            element: <SpO2Dashboard />,
+          },
+          {
+            path: "/checklist",
+            element: <Checklist />,
+          },
+          {
+            path: "/medicalrecords",
+            element: <MedicalRecords />,
           },
         ],
       },
