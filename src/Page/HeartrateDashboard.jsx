@@ -39,37 +39,52 @@ const getWeekData = (selectedDate, monthData) => {
 export default function HeartRateDashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [sampleData, setSampleData] = useState([]);
-  const [avgHeartRate, setAvgHeartRate] = useState(75);
-  const [minHeartRate, setMinHeartRate] = useState(60);
-  const [maxHeartRate, setMaxHeartRate] = useState(90);
+  const [heartRateData, setHeartRateData] = useState({
+    avgHeartRate: 75,
+    minHeartRate: 60,
+    maxHeartRate: 90
+  });
   
   useEffect(() => {
     const month = selectedDate.toLocaleString("default", { month: "short" });
     const monthData = dummyData[month] || [];
+    
+    // Get data for the specific selected day
+    const dayIndex = selectedDate.getDate() - 1;
+    const dayData = dayIndex >= 0 && dayIndex < monthData.length ? monthData[dayIndex] : null;
+    
+    // Get week data for the chart
     const weekData = getWeekData(selectedDate, monthData);
     setSampleData(weekData);
-    if (weekData.length > 0) {
-      const lastEntry = weekData[weekData.length - 1];
-      setAvgHeartRate(lastEntry.avgHeartRate);
-      setMinHeartRate(lastEntry.minHeartRate);
-      setMaxHeartRate(lastEntry.maxHeartRate);
+    
+    // Update heart rate data for the selected day
+    if (dayData) {
+      setHeartRateData({
+        avgHeartRate: dayData.avgHeartRate,
+        minHeartRate: dayData.minHeartRate,
+        maxHeartRate: dayData.maxHeartRate
+      });
     }
   }, [selectedDate]);
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
     <div className="p-6 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <Card>
         <CardContent>
-          <h2 className="text-xl font-semibold">Last Recorded Heart Rate</h2>
-          <p className="text-3xl font-bold">{avgHeartRate} BPM</p>
+          <h2 className="text-xl font-semibold">Heart Rate for {selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</h2>
+          <p className="text-3xl font-bold">{heartRateData.avgHeartRate} BPM</p>
         </CardContent>
       </Card>
 
       <Card>
         <CardContent>
           <h2 className="text-xl font-semibold">Heart Rate Range</h2>
-          <p className="text-lg">Min: {minHeartRate} BPM</p>
-          <p className="text-lg">Max: {maxHeartRate} BPM</p>
+          <p className="text-lg">Min: {heartRateData.minHeartRate} BPM</p>
+          <p className="text-lg">Max: {heartRateData.maxHeartRate} BPM</p>
         </CardContent>
       </Card>
 
@@ -107,9 +122,8 @@ export default function HeartRateDashboard() {
       <Card>
         <CardContent>
           <Calendar 
-            mode="month" 
             selected={selectedDate} 
-            onSelect={(date) => setSelectedDate(date)} 
+            onSelect={handleDateSelect} 
           />
         </CardContent>
       </Card>
