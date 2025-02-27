@@ -1,12 +1,34 @@
 import { useState, useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, BarChart, Bar } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  BarChart,
+  Bar,
+} from "recharts";
 import { Card, CardContent } from "../components/ui/Card.jsx";
 import { Progress } from "../components/ui/Progress.jsx";
 import { Calendar } from "../components/ui/Calendar.jsx";
 
-
 const generateDummyData = () => {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const data = {};
   months.forEach((month) => {
     data[month] = Array.from({ length: 30 }, (_, day) => ({
@@ -37,7 +59,9 @@ export default function StepsDashboard() {
     const monthData = dummyData[month] || [];
     const weekData = getWeekData(selectedDate, monthData);
     setSampleData(weekData);
-    setDailySteps(monthData[Math.floor(Math.random() * monthData.length)].steps);
+    setDailySteps(
+      monthData[Math.floor(Math.random() * monthData.length)].steps
+    );
     setMonthlyAverage(
       monthData.reduce((sum, entry) => sum + entry.steps, 0) / monthData.length
     );
@@ -100,24 +124,23 @@ export default function StepsDashboard() {
       <Card>
         <CardContent>
           <h2 className="text-xl font-semibold">Monthly Average Steps</h2>
-          <br/>
+          <br />
           <p className="text-3xl font-bold">{Math.floor(monthlyAverage)}</p>
         </CardContent>
       </Card>
       <Card>
         <CardContent>
-        <h2 className="text-xl font-semibold">Set Your Goal</h2>
-        <br />
-        <input
+          <h2 className="text-xl font-semibold">Set Your Goal</h2>
+          <br />
+          <input
             type="number"
             className="mt-2 border p-1 w-full"
             value={goal}
             onChange={(e) => setGoal(Number(e.target.value))}
           />
-          <br/>          
+          <br />
         </CardContent>
       </Card>
-      
 
       {/* Line Graph for Weekly Steps */}
       <Card className="col-span-1 md:col-span-2">
@@ -129,7 +152,12 @@ export default function StepsDashboard() {
               <YAxis />
               <Tooltip />
               <CartesianGrid strokeDasharray="3 3" />
-              <Line type="monotone" dataKey="steps" stroke="#4F46E5" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="steps"
+                stroke="#4F46E5"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>
@@ -137,10 +165,10 @@ export default function StepsDashboard() {
       {/* Calendar */}
       <Card>
         <CardContent>
-          <Calendar 
-            mode="month" 
-            value={selectedDate} 
-            onChange={(date) => setSelectedDate(date)} 
+          <Calendar
+            mode="month"
+            value={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
           />
         </CardContent>
       </Card>
@@ -150,7 +178,13 @@ export default function StepsDashboard() {
         <CardContent>
           <h2 className="text-xl font-semibold mb-2">Monthly Steps</h2>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={dummyData[selectedDate.toLocaleString("default", { month: "short" })] || []}>
+            <BarChart
+              data={
+                dummyData[
+                  selectedDate.toLocaleString("default", { month: "short" })
+                ] || []
+              }
+            >
               <XAxis dataKey="day" />
               <YAxis />
               <Tooltip />
@@ -160,8 +194,6 @@ export default function StepsDashboard() {
           </ResponsiveContainer>
         </CardContent>
       </Card>
-
-      
     </div>
   );
 }

@@ -1,89 +1,199 @@
-import React, { useState, useEffect } from "react";
-import "./css/Checklist.css"; // Import external CSS
+import React from "react";
+import { Link } from "react-router-dom";
+// Custom tracker icons with consistent styling
+const TrackerIcons = {
+  steps: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#3B82F6"
+      strokeWidth="2"
+    >
+      <path d="M7 15l5 5 5-5M7 9l5-5 5 5" />
+    </svg>
+  ),
+  sleep: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#6366F1"
+      strokeWidth="2"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  ),
+  medicine: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#EF4444"
+      strokeWidth="2"
+    >
+      <rect x="7" y="3" width="10" height="18" rx="1" />
+      <path d="M7 9h10M7 15h10M12 3v18" />
+    </svg>
+  ),
+  calories: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#F97316"
+      strokeWidth="2"
+    >
+      <path d="M12 2.5c-1.5 2-5 5-5 10 0 4.5 2.5 7.5 5 7.5s5-3 5-7.5c0-5-3.5-8-5-10z" />
+    </svg>
+  ),
+  heart: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#EC4899"
+      strokeWidth="2"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  ),
+  water: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#3B82F6"
+      strokeWidth="2"
+    >
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+    </svg>
+  ),
+  weight: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#22C55E"
+      strokeWidth="2"
+    >
+      <rect x="2" y="7" width="20" height="10" rx="2" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
+  ),
+  exercise: (
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5"
+      fill="none"
+      stroke="#A855F7"
+      strokeWidth="2"
+    >
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+      <path d="M6 8H5a4 4 0 0 0 0 8h1" />
+      <path d="M3 12h18" />
+    </svg>
+  ),
+};
 
-const tasks = [
-    { 
-      id: 1, 
-      name: "Morning Walk", 
-      description: "Start your day with a 30-minute walk for better health.", 
-      image: "https://tse1.mm.bing.net/th?id=OIP.sD2McSOOOcUxA4OES14XagHaE2&pid=Api&P=0&h=180" 
+const TrackerOption = ({ icon, title, description, path }) => {
+  return (
+    <Link to={path}>
+      <div className="bg-white transition-all duration-200 ease-in hover:bg-green-300 rounded-lg shadow-sm border border-gray-100 mb-3 h-full">
+        <div className="flex items-center py-4 px-5 h-full">
+          <div className="flex-shrink-0 mr-4">{icon}</div>
+          <div className="flex-1">
+            <h3 className="text-base font-medium text-gray-800 mb-1">
+              {title}
+            </h3>
+            <p className="text-sm text-gray-500">{description}</p>
+          </div>
+          <div className="text-gray-300 ml-2">
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+const HealthTrackersInTwoColumns = () => {
+  const trackers = [
+    {
+      icon: TrackerIcons.steps,
+      title: "Steps Tracker",
+      description: "Track your daily steps and activity",
+      path: "/steps",
     },
-    { 
-      id: 2, 
-      name: "Hydrate Well", 
-      description: "Drink at least 8 glasses of water daily to stay hydrated.", 
-      image: "https://tse2.mm.bing.net/th?id=OIP.4cBZtHMJ1rt9dq9lni3aawHaE8&pid=Api&P=0&h=180" 
+    {
+      icon: TrackerIcons.sleep,
+      title: "Sleep Tracker",
+      description: "Monitor your sleep patterns and quality",
+      path: "/sleepdashboard",
     },
-    { 
-      id: 3, 
-      name: "Healthy Diet", 
-      description: "Eat a balanced diet rich in vegetables, fruits, and proteins.", 
-      image: "https://tse2.mm.bing.net/th?id=OIP.k4R4BdRL9Kgs11KwG6V82QHaE8&pid=Api&P=0&h=180" 
+    {
+      icon: TrackerIcons.medicine,
+      title: "Medicine Tracker",
+      description: "Keep track of your medications and doses",
+      path: "/medicine",
     },
-    { 
-      id: 4, 
-      name: "Medication", 
-      description: "Take your prescribed medicines on time to stay healthy.", 
-      image: "https://tse3.mm.bing.net/th?id=OIP.VDejbNC8mG2bU2dN7IvyogHaE8&pid=Api&P=0&h=180" 
+    {
+      icon: TrackerIcons.calories,
+      title: "Calories Burnt",
+      description: "Track calories burned through activities",
+      path: "/caloriedashboard",
     },
-    { 
-      id: 5, 
-      name: "Light Exercise", 
-      description: "Engage in simple exercises like stretching or yoga for flexibility.", 
-      image: "https://tse2.mm.bing.net/th?id=OIP.dmmQcE11kZ8YmgnDtoU67AHaE8&pid=Api&P=0&h=180" 
+    {
+      icon: TrackerIcons.heart,
+      title: "Heart Rate",
+      description: "Monitor your heart rate and zones",
+      path: "/heartrate",
     },
-    { 
-      id: 6, 
-      name: "Adequate Sleep", 
-      description: "Get at least 7-8 hours of sleep for a refreshed mind and body.", 
-      image: "https://tse3.mm.bing.net/th?id=OIP.VNype4fnZddxTPBAohOrOAHaEK&pid=Api&P=0&h=180" 
-    }
+    {
+      icon: TrackerIcons.water,
+      title: "Water Tracker",
+      description: "Track your daily water intake",
+      path: "/water",
+    },
+    {
+      icon: TrackerIcons.weight,
+      title: "Weight Tracker",
+      description: "Monitor your weight and body changes",
+      path: "/weightdashboard",
+    },
+    {
+      icon: TrackerIcons.exercise,
+      title: "Exercise Tracker",
+      description: "Log and monitor your workouts",
+      path: "/exercise",
+    },
   ];
-const Checklist = () => {
-  const [checkedTasks, setCheckedTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("checkedTasks");
-    return savedTasks ? JSON.parse(savedTasks) : {};
-  });
-
-  useEffect(() => {
-    localStorage.setItem("checkedTasks", JSON.stringify(checkedTasks));
-  }, [checkedTasks]);
-
-  useEffect(() => {
-    const now = new Date();
-    const lastReset = localStorage.getItem("lastReset");
-    if (!lastReset || new Date(lastReset).getDate() !== now.getDate()) {
-      setCheckedTasks({});
-      localStorage.setItem("lastReset", now);
-    }
-  }, []);
-
-  const toggleTask = (id) => {
-    setCheckedTasks((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
 
   return (
-    <div className="checklist-container">
-      <div className="checklist-grid">
-        {tasks.map((task) => (
-          <div key={task.id} className="task-card">
-            <img src={task.image} alt={task.name} className="task-image" />
-            <h3 className="task-title">{task.name}</h3>
-            <p className="task-description">{task.description}</p>
-            <label className="checkbox-container">
-              <input
-                type="checkbox"
-                checked={checkedTasks[task.id] || false}
-                onChange={() => toggleTask(task.id)}
-              />
-              <span className="checkmark"></span>
-              <span className="checkbox-label">Completed</span>
-            </label>
-          </div>
-        ))}
+    <div className="w-full min-h-screen  flex">
+      <div className="max-w-4xl mx-auto px-6 py-8 w-full">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          Health Trackers
+        </h1>
+
+        <div className="grid grid-cols-2 gap-4 cursor-pointer">
+          {trackers.map((tracker, index) => (
+            <div key={index} className="h-full ">
+              <TrackerOption {...tracker} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Checklist;
+export default HealthTrackersInTwoColumns;

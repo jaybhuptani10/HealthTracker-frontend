@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 // import { Card, CardContent } from "@/components/ui/card";
 // import { Calendar } from "@/components/ui/calendar";
 // import { Progress } from "@/components/ui/progress";
@@ -7,24 +15,40 @@ import { Card, CardContent } from "../components/ui/Card.jsx";
 import { Progress } from "../components/ui/Progress.jsx";
 import { Calendar } from "../components/ui/Calendar.jsx";
 const generateDummyData = () => {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const data = {};
-  
+
   months.forEach((month) => {
     data[month] = Array.from({ length: 30 }, (_, day) => {
       const calories = 2000 + (Math.random() * 400 - 200);
       return {
         day: `Day ${day + 1}`,
-        date: new Date(2025, months.indexOf(month), day + 1).toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric' 
-        }),
+        date: new Date(2025, months.indexOf(month), day + 1).toLocaleDateString(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+          }
+        ),
         calories: Math.round(calories),
         macros: {
           protein: Math.round(calories * 0.3),
           carbs: Math.round(calories * 0.45),
-          fat: Math.round(calories * 0.25)
-        }
+          fat: Math.round(calories * 0.25),
+        },
       };
     });
   });
@@ -48,7 +72,7 @@ export default function CalorieDashboard() {
   const [macros, setMacros] = useState({
     protein: 140,
     carbs: 210,
-    fat: 65
+    fat: 65,
   });
 
   useEffect(() => {
@@ -57,7 +81,10 @@ export default function CalorieDashboard() {
     const weekData = getWeekData(selectedDate, monthData);
     setSampleData(weekData);
     setMonthlyAverage(
-      Math.round(monthData.reduce((sum, entry) => sum + entry.calories, 0) / monthData.length)
+      Math.round(
+        monthData.reduce((sum, entry) => sum + entry.calories, 0) /
+          monthData.length
+      )
     );
     if (weekData.length > 0) {
       setMacros(weekData[weekData.length - 1].macros);
@@ -65,7 +92,7 @@ export default function CalorieDashboard() {
   }, [selectedDate]);
 
   return (
-    <div className="p-6 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <div className="p-6 sm:px-20 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {/* Current Calories & Monthly Average */}
       <Card>
         <CardContent>
@@ -83,22 +110,34 @@ export default function CalorieDashboard() {
       <Card>
         <CardContent>
           <h2 className="text-xl font-semibold mb-4">Macronutrients</h2>
-          
+
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Protein ({macros.protein}g)</span>
+                <span className="text-sm font-medium">
+                  Protein ({macros.protein}g)
+                </span>
                 <span className="text-sm text-gray-500">30%</span>
               </div>
-              <Progress value={30} className="h-2 bg-gray-200" indicatorClassName="bg-blue-500" />
+              <Progress
+                value={30}
+                className="h-2 bg-gray-200"
+                indicatorClassName="bg-blue-500"
+              />
             </div>
 
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Carbs ({macros.carbs}g)</span>
+                <span className="text-sm font-medium">
+                  Carbs ({macros.carbs}g)
+                </span>
                 <span className="text-sm text-gray-500">45%</span>
               </div>
-              <Progress value={45} className="h-2 bg-gray-200" indicatorClassName="bg-green-500" />
+              <Progress
+                value={45}
+                className="h-2 bg-gray-200"
+                indicatorClassName="bg-green-500"
+              />
             </div>
 
             <div>
@@ -106,7 +145,11 @@ export default function CalorieDashboard() {
                 <span className="text-sm font-medium">Fat ({macros.fat}g)</span>
                 <span className="text-sm text-gray-500">25%</span>
               </div>
-              <Progress value={25} className="h-2 bg-gray-200" indicatorClassName="bg-yellow-500" />
+              <Progress
+                value={25}
+                className="h-2 bg-gray-200"
+                indicatorClassName="bg-yellow-500"
+              />
             </div>
 
             <div className="pt-2 mt-2 border-t">
@@ -158,18 +201,20 @@ export default function CalorieDashboard() {
       {/* Line Graph for Weekly Calories */}
       <Card className="col-span-1 md:col-span-2">
         <CardContent>
-          <h2 className="text-xl font-semibold mb-2">Calorie Trend (Last 7 Days)</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            Calorie Trend (Last 7 Days)
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={sampleData}>
               <XAxis dataKey="day" />
-              <YAxis domain={['auto', 'auto']} />
+              <YAxis domain={["auto", "auto"]} />
               <Tooltip />
               <CartesianGrid strokeDasharray="3 3" />
-              <Line 
-                type="monotone" 
-                dataKey="calories" 
-                stroke="#4F46E5" 
-                strokeWidth={2} 
+              <Line
+                type="monotone"
+                dataKey="calories"
+                stroke="#4F46E5"
+                strokeWidth={2}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -179,10 +224,10 @@ export default function CalorieDashboard() {
       {/* Calendar */}
       <Card>
         <CardContent>
-          <Calendar 
-            mode="month" 
-            selected={selectedDate} 
-            onSelect={(date) => setSelectedDate(date)} 
+          <Calendar
+            mode="month"
+            selected={selectedDate}
+            onSelect={(date) => setSelectedDate(date)}
           />
         </CardContent>
       </Card>

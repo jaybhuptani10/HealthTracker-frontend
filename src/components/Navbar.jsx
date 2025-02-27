@@ -93,7 +93,10 @@ const Navbar = () => {
           >
             <CiSettings size={24} className="cursor-pointer" />
           </div>
-          <div className="bg-white p-1 rounded-full shadow-md cursor-pointer">
+          <div
+            onClick={() => navigate("/userdashboard")}
+            className="bg-white p-1 rounded-full shadow-md cursor-pointer"
+          >
             <img
               src="https://plus.unsplash.com/premium_photo-1700353612860-bd8ab8d71f05?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               className="h-12 w-12 rounded-full object-cover"

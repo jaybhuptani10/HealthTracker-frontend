@@ -17,6 +17,7 @@ import UserDashboard from "./Page/UserDashboard.jsx";
 import SpO2Dashboard from "./Page/O2.jsx"; // Import the new SpO2 dashboard
 import Checklist from "./Page/Checklist.jsx"; // Import the Checklist page
 import MedicalRecords from "./Page/MedicalRecords.jsx"; // Import the MedicalRecords page
+import WaterIntakeDashboard from "./Page/WaterDashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
           {
             path: "/medicalrecords",
             element: <MedicalRecords />,
+          },
+          {
+            path: "/waterdashboard",
+            element: <WaterIntakeDashboard />,
           },
         ],
       },
