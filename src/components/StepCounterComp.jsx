@@ -1,10 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { RadialBarChart, RadialBar, PolarAngleAxis } from "recharts";
 
 import img from "./img.png";
 import { useLocation } from "react-router-dom";
-const StepCounterComp = () => {
-  const data = [{ name: "Score", value: 30, fill: "#8338EC" }];
+
+const StepCounterComp = ({sensorData}) => {
+  // const data = [{ name: "Steps", value: 30, fill: "#8338EC" }];
+  console.log(sensorData);
+  
+ 
+
+function sumStepsForDate(sensorData, targetDate) {
+  if (!sensorData.length) return 0;
+  
+  // Sum steps for the given target date, ensuring steps exist
+  let totalSteps = sensorData.reduce((sum, data) => {
+      let currentDate = data.DateTime.split(' ')[0];
+      return currentDate === targetDate && data.Steps !== undefined ? sum + data.Steps : sum;
+  }, 0);
+  
+  return totalSteps;
+}
+
+const steps = sumStepsForDate(sensorData, "26-02-2025");
+const data = [{ name: "Steps", value: steps/100, fill: "#8338EC" }];
+
+
+console.log(sumStepsForDate(sensorData, "26-02-2025"));
+
+
+
   return (
     <div className="h-[100%] w-full bg-[#ffffff] flex items-center justify-center relative rounded-2xl cursor-pointer">
       <RadialBarChart
@@ -34,7 +59,7 @@ const StepCounterComp = () => {
         />
       </RadialBarChart>
 
-      <h1 className="absolute text-4xl">8,000</h1>
+      <h1 className="absolute text-4xl">{steps}</h1>
       <span className="absolute text-xl text-gray-500 mt-16">Steps</span>
       <h1 className="absolute bottom-10 text-xl text-gray-500">10,000 steps</h1>
 
