@@ -1,6 +1,10 @@
 import React from "react";
 
-const O2 = () => {
+const O2 = ({ sensorData }) => {
+  // Get the latest oxygen saturation (SPO2) value from sensor data
+  const latestData = sensorData && sensorData.length > 0 ? sensorData[0] : null;
+  const spo2 = latestData ? latestData.SPO2 : "N/A";
+
   return (
     <div className="flex flex-col items-start p-6 h-full">
       <h2 className="text-2xl font-bold mb-3">Oxygen Status</h2>
@@ -13,7 +17,7 @@ const O2 = () => {
         </div>
       </div>
 
-      <div className="text-lg font-medium">98%</div>
+      <div className="text-lg font-medium">{spo2}%</div>
     </div>
   );
 };

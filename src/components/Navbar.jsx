@@ -20,7 +20,6 @@ const Navbar = () => {
     location.pathname === path
       ? "bg-black text-white"
       : "hover:bg-gray-300 transition-all duration-300";
-
   return (
     <>
       {/* Mobile Menu Button */}
@@ -45,25 +44,31 @@ const Navbar = () => {
         </div>
 
         {/* Top Section */}
+        {/* Top Section */}
         <div className="flex flex-col items-center gap-4">
-          <div className="bg-black text-white p-3 rounded-full cursor-pointer">
-            <HiOutlineHome size={24} onClick={() => navigate("/")} />
-          </div>
           <div
-            className={`p-3 rounded-full ${getActiveClass("/fitness")}`}
+            className={`p-3 rounded-full ${getActiveClass("/")}`}
+            onClick={() => navigate("/")}
+          >
+            <HiOutlineHome size={24} className="cursor-pointer" />
+          </div>
+
+          <div
+            className={`p-3 rounded-full ${getActiveClass("/medicalrecords")}`}
             data-tooltip-id="tooltip"
-            data-tooltip-content="Fitness"
+            data-tooltip-content="Medical Records"
+            onClick={() => navigate("/medicalrecords")}
           >
             <IoFitnessOutline size={24} className="cursor-pointer" />
           </div>
+
           <div
-            className={`p-3 cursor-pointer rounded-full cursor-pointer${getActiveClass(
-              "/checklist"
-            )}`}
+            className={`p-3 rounded-full ${getActiveClass("/checklist")}`}
             data-tooltip-id="tooltip"
             data-tooltip-content="Checklist"
+            onClick={() => navigate("/checklist")}
           >
-            <GoChecklist className="cursor-pointer" size={24} />
+            <GoChecklist size={24} className="cursor-pointer" />
           </div>
         </div>
 

@@ -28,7 +28,7 @@ const Facts = () => {
   }, []);
 
   return (
-    <div className="p-4 flex flex-col gap-10 max-h-[100%] sm:h-full rounded-lg shadow-lg w-full sm:w-[50%] mx-auto">
+    <div className="p-4 flex flex-col gap-5 h-96  sm:h-full rounded-lg shadow-lg w-full sm:w-[50%] mx-auto">
       <h2 className="text-xl font-bold text-center text-blue-600">
         Health Facts
       </h2>
@@ -41,7 +41,7 @@ const Facts = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5 }}
-            className="p-3 bg-white/30  rounded-lg shadow-md"
+            className="p-3 bg-white/30 h-32 rounded-lg shadow-md flex flex-col justify-center overflow-hidden"
           >
             <p className="text-gray-800 font-semibold">
               <strong>Q:</strong> {fact?.question}

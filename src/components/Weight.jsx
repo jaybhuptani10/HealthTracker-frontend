@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { LineChart, Line, Tooltip, YAxis } from "recharts";
 
 const Weight = () => {
+  const navigate = useNavigate();
   const data = [
     { uv: 92 },
     { uv: 90.5 },
@@ -25,7 +27,10 @@ const Weight = () => {
   };
 
   return (
-    <div className="h-[100%] w-[50%] bg-[#ffffff] flex p-5 relative rounded-2xl cursor-pointer flex-col overflow-hidden">
+    <div
+      onClick={() => navigate("/weightdashboard")}
+      className="h-[100%] w-[50%] bg-[#ffffff] flex p-5 relative rounded-2xl cursor-pointer flex-col overflow-hidden"
+    >
       <div>
         <h1 className="text-xl">Weight</h1>
         <span className="text-sm text-gray-500 mt-6">Lost 4Kg</span>

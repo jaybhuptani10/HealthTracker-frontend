@@ -15,8 +15,6 @@ const Sleep = () => {
         );
         const data = await response.json();
 
-        console.log("Full Sensor Data:", data);
-
         if (
           !data ||
           !Array.isArray(data.sensor_data) ||
@@ -45,8 +43,6 @@ const Sleep = () => {
           throw new Error(`No sleep data available for ${selectedDate}`);
         }
 
-        console.log(`Data for ${selectedDate}:`, filteredData);
-
         // 🩺 Define sleep threshold (e.g., below 65 BPM = sleeping)
         const sleepThreshold = 95;
         const sleepEntries = filteredData.filter(
@@ -63,8 +59,8 @@ const Sleep = () => {
           sleepEntries[sleepEntries.length - 1].DateTime
         );
 
-        console.log("Sleep Start:", sleepStart);
-        console.log("Sleep End:", sleepEnd);
+        // console.log("Sleep Start:", sleepStart);
+        // console.log("Sleep End:", sleepEnd);
 
         // ⏳ Calculate sleep duration
         const durationMs = sleepEnd - sleepStart;
