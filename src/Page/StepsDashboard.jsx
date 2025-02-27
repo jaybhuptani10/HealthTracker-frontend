@@ -43,14 +43,55 @@ export default function StepsDashboard() {
     );
   }, [selectedDate]);
 
+  const [sensorData, setSensorData] = useState([]);
+  
+    useEffect(() => {
+      const fetchSensorData = async () => {
+        try {
+          const response = await fetch(
+            "https://swwhgf14g7.execute-api.ap-south-1.amazonaws.com/getSensorData"
+          );
+          const data = await response.json();
+  
+          if (!data || !data.sensor_data || data.sensor_data.length === 0) {
+            throw new Error("No sensor data available.");
+          }
+  
+          setSensorData(data.sensor_data);
+        } catch (error) {
+          console.error("Error fetching sensor data:", error);
+        }
+      };
+  
+      fetchSensorData();
+    }, []);
+
+    function sumStepsForDate(sensorData, targetDate) {
+      if (!sensorData.length) return 0;
+      
+      // Sum steps for the given target date, ensuring steps exist
+      let totalSteps = sensorData.reduce((sum, data) => {
+          let currentDate = data.DateTime.split(' ')[0];
+          return currentDate === targetDate && data.Steps !== undefined ? sum + data.Steps : sum;
+      }, 0);
+      
+      return totalSteps;
+    }
+    
+    const steps = sumStepsForDate(sensorData, "26-02-2025");
+    const data = [{ name: "Steps", value: steps/100, fill: "#8338EC" }];
+    
+    
+    console.log(sumStepsForDate(sensorData, "26-02-2025"));
+
   return (
-    <div className="p-6 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <div className="p-6 grid gap-6 grid-cols-1 ml-8 md:grid-cols-2 lg:grid-cols-3">
       {/* Daily Steps */}
       <Card>
         <CardContent>
           <h2 className="text-xl font-semibold">Daily Steps</h2>
-          <p className="text-3xl font-bold">{dailySteps}</p>
-          <Progress value={(dailySteps / goal) * 100} className="mt-2" />
+          <p className="text-3xl font-bold">{steps}</p>
+          <Progress value={(steps / goal) * 100} className="mt-2" />
           <p className="text-sm text-gray-500">Goal: {goal} steps</p>
         </CardContent>
       </Card>
