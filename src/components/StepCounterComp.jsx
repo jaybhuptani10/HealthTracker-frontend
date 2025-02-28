@@ -27,7 +27,9 @@ const StepCounterComp = ({ sensorData }) => {
     .split("/")
     .reverse()
     .join("-");
-  const steps = sumStepsForDate(sensorData, today);
+
+  const reversedDate = today.split("-").reverse().join("-");
+  const steps = sumStepsForDate(sensorData, reversedDate);
   const data = [{ name: "Steps", value: steps / 100, fill: "#8338EC" }];
 
   console.log(sumStepsForDate(sensorData, "26-02-2025"));
