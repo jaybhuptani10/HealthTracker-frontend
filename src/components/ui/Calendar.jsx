@@ -1,20 +1,8 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 export function Calendar({ selected, onSelect }) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedDayData, setSelectedDayData] = useState(null);
-
-  const handleChange = (e) => {
-    const newDate = new Date(e.target.value);
-    if (!isNaN(newDate)) {
-      onSelect(newDate);
-    }
-  };
-
-  // Current stats
-  const currentSteps = 7500;
-  const goalSteps = 10000;
-  const monthlyAverage = 8300;
+  const [currentMonth, setCurrentMonth] = useState(new Date(selected));
 
   // Calculate calendar dates
   const getDaysInMonth = (date) => {
@@ -28,68 +16,52 @@ export function Calendar({ selected, onSelect }) {
     return { daysInMonth, startingDay };
   };
 
-  const { daysInMonth, startingDay } = getDaysInMonth(selectedDate);
+  const { daysInMonth, startingDay } = getDaysInMonth(currentMonth);
 
   const handlePrevMonth = () => {
-    setSelectedDate(
-      new Date(selectedDate.setMonth(selectedDate.getMonth() - 1))
-    );
+    const newDate = new Date(currentMonth);
+    newDate.setMonth(newDate.getMonth() - 1);
+    setCurrentMonth(newDate);
   };
 
   const handleNextMonth = () => {
-    setSelectedDate(
-      new Date(selectedDate.setMonth(selectedDate.getMonth() + 1))
-    );
+    const newDate = new Date(currentMonth);
+    newDate.setMonth(newDate.getMonth() + 1);
+    setCurrentMonth(newDate);
   };
 
   const handleDateClick = (day) => {
-    // Simulate daily data for the selected date
-    const hourlyData = Array.from({ length: 24 }, (_, hour) => ({
-      hour: `${hour}:00`,
-      steps: Math.floor(Math.random() * 1000),
-    }));
-    setSelectedDayData(hourlyData);
+    // Create a new date object for the selected day in the current month
+    const newDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    // Call the parent's onSelect callback
+    onSelect(newDate);
   };
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
-      {/* <div className="flex items-center justify-between mb-4">
-      <h2 className="text-xl font-semibold">Date</h2>
-      <div className="flex gap-2">
-        <button 
-          onClick={handlePrevMonth}
-          className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button 
-          onClick={handleNextMonth}
-          className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
-    </div> */}
       <div className="text-center mb-4 font-medium">
-        {/* {selectedDate.toLocaleString('default', { month: 'long', year: 'numeric' })} */}
         <div className="flex justify-between items-center mb-4 px-3">
           <button
-            onClick={() => handlePrevMonth()}
+            onClick={handlePrevMonth}
             className="px-3 py-1 text-base cursor-pointer bg-gray-200 hover:bg-gray-300 rounded"
           >
-            &lt;
+            <ChevronLeft size={16} />
           </button>
           <h2 className="text-xl font-semibold">
-            {selectedDate.toLocaleString("default", {
+            {currentMonth.toLocaleString("default", {
               month: "long",
               year: "numeric",
             })}
           </h2>
           <button
-            onClick={() => handleNextMonth()}
+            onClick={handleNextMonth}
             className="px-3 py-1 text-base cursor-pointer bg-gray-200 hover:bg-gray-300 rounded"
           >
-            &gt;
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>
@@ -102,15 +74,30 @@ export function Calendar({ selected, onSelect }) {
         {Array.from({ length: startingDay }).map((_, index) => (
           <div key={`empty-${index}`} className="p-2"></div>
         ))}
-        {Array.from({ length: daysInMonth }).map((_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handleDateClick(index + 1)}
-            className="p-2 text-center hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            {index + 1}
-          </button>
-        ))}
+        {Array.from({ length: daysInMonth }).map((_, index) => {
+          const day = index + 1;
+          const isToday =
+            day === new Date().getDate() &&
+            currentMonth.getMonth() === new Date().getMonth() &&
+            currentMonth.getFullYear() === new Date().getFullYear();
+
+          const isSelected =
+            day === selected.getDate() &&
+            currentMonth.getMonth() === selected.getMonth() &&
+            currentMonth.getFullYear() === selected.getFullYear();
+
+          return (
+            <button
+              key={day}
+              onClick={() => handleDateClick(day)}
+              className={`p-2 text-center hover:bg-gray-100 rounded-lg transition-colors ${
+                isToday ? "bg-blue-500 text-white font-bold" : ""
+              } ${isSelected ? "bg-blue-200 font-bold" : ""}`}
+            >
+              {day}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

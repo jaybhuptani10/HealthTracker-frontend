@@ -79,7 +79,10 @@ const Navbar = () => {
             data-tooltip-id="tooltip"
             data-tooltip-content="Notifications"
           >
-            <IoMdNotificationsOutline size={24} />
+            <IoMdNotificationsOutline
+              onClick={() => navigate("/notification")}
+              size={24}
+            />
           </div>
           <span className="absolute top-1 right-2 bg-red-500 w-2 h-2 rounded-full"></span>
         </div>

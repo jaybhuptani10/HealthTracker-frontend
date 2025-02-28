@@ -1,37 +1,63 @@
 import { useState, useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-// import { Card, CardContent } from "@/components/ui/card";
-// import { Progress } from "@/components/ui/progress";
-// import { Calendar } from "@/components/ui/calendar";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 import { Card, CardContent } from "../components/ui/Card.jsx";
 import { Progress } from "../components/ui/Progress.jsx";
 import { Calendar } from "../components/ui/Calendar.jsx";
+
 const generateSleepData = () => {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const data = {};
-  
+
   months.forEach((month) => {
     data[month] = Array.from({ length: 30 }, (_, day) => {
-      const totalSleep = 6 + (Math.random() * 4); // Sleep duration between 6-10 hours
+      const totalSleep = 6 + Math.random() * 4; // Sleep duration between 6-10 hours
       const deepSleep = totalSleep * (0.2 + Math.random() * 0.1); // 20-30% deep sleep
       const remSleep = totalSleep * (0.2 + Math.random() * 0.1); // 20-30% REM sleep
       const lightSleep = totalSleep - deepSleep - remSleep;
-      
+
       return {
         day: `Day ${day + 1}`,
-        date: new Date(2025, months.indexOf(month), day + 1).toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric' 
-        }),
+        date: new Date(2025, months.indexOf(month), day + 1).toLocaleDateString(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+          }
+        ),
         totalSleep: Number(totalSleep.toFixed(1)),
         sleepQuality: Math.round(Math.random() * 30 + 70), // 70-100%
         phases: {
           deep: Number(deepSleep.toFixed(1)),
           rem: Number(remSleep.toFixed(1)),
-          light: Number(lightSleep.toFixed(1))
+          light: Number(lightSleep.toFixed(1)),
         },
-        sleepTime: `${Math.floor(Math.random() * 2) + 22}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
-        wakeTime: `${Math.floor(Math.random() * 2) + 6}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`
+        sleepTime: `${Math.floor(Math.random() * 2) + 22}:${String(
+          Math.floor(Math.random() * 60)
+        ).padStart(2, "0")}`,
+        wakeTime: `${Math.floor(Math.random() * 2) + 6}:${String(
+          Math.floor(Math.random() * 60)
+        ).padStart(2, "0")}`,
       };
     });
   });
@@ -48,43 +74,76 @@ const getWeekData = (selectedDate, monthData) => {
 
 export default function SleepDashboard() {
   const [targetSleep, setTargetSleep] = useState(8);
-  const [currentSleep, setCurrentSleep] = useState(7.5);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [sampleData, setSampleData] = useState([]);
   const [monthlyAverage, setMonthlyAverage] = useState(7.8);
-  const [sleepPhases, setSleepPhases] = useState({
-    deep: 2.2,
-    rem: 1.8,
-    light: 3.5
+  const [currentSleepData, setCurrentSleepData] = useState({
+    totalSleep: 7.5,
+    phases: {
+      deep: 2.2,
+      rem: 1.8,
+      light: 3.5,
+    },
+    sleepQuality: 85,
+    sleepTime: "23:00",
+    wakeTime: "07:00",
   });
-  const [sleepQuality, setSleepQuality] = useState(85);
-  const [bedtime, setBedtime] = useState("23:00");
-  const [wakeTime, setWakeTime] = useState("07:00");
 
+  // Update dashboard data when the selected date changes
   useEffect(() => {
     const month = selectedDate.toLocaleString("default", { month: "short" });
     const monthData = dummyData[month] || [];
+
+    // Get the specific day's data
+    const dayIndex = selectedDate.getDate() - 1;
+    const dayData =
+      dayIndex >= 0 && dayIndex < monthData.length ? monthData[dayIndex] : null;
+
+    // Get the week's data for the chart
     const weekData = getWeekData(selectedDate, monthData);
     setSampleData(weekData);
+
+    // Calculate monthly average
     setMonthlyAverage(
-      Number((monthData.reduce((sum, entry) => sum + entry.totalSleep, 0) / monthData.length).toFixed(1))
+      Number(
+        (
+          monthData.reduce((sum, entry) => sum + entry.totalSleep, 0) /
+          monthData.length
+        ).toFixed(1)
+      )
     );
-    if (weekData.length > 0) {
-      const lastEntry = weekData[weekData.length - 1];
-      setSleepPhases(lastEntry.phases);
-      setSleepQuality(lastEntry.sleepQuality);
-      setBedtime(lastEntry.sleepTime);
-      setWakeTime(lastEntry.wakeTime);
+
+    // Update current sleep data with the selected day's data
+    if (dayData) {
+      setCurrentSleepData({
+        totalSleep: dayData.totalSleep,
+        phases: dayData.phases,
+        sleepQuality: dayData.sleepQuality,
+        sleepTime: dayData.sleepTime,
+        wakeTime: dayData.wakeTime,
+      });
     }
   }, [selectedDate]);
 
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+  };
+
   return (
-    <div className="p-6 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <div className="p-6 sm:px-20 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {/* Current Sleep Stats */}
       <Card>
         <CardContent>
-          <h2 className="text-xl font-semibold">Last Night's Sleep</h2>
-          <p className="text-3xl font-bold">{currentSleep} hours</p>
+          <h2 className="text-xl font-semibold">
+            Sleep for{" "}
+            {selectedDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })}
+          </h2>
+          <p className="text-3xl font-bold">
+            {currentSleepData.totalSleep} hours
+          </p>
           <p className="text-sm text-gray-500">Target: {targetSleep} hours</p>
           <div className="mt-4 pt-4 border-t">
             <h3 className="text-lg font-semibold">Monthly Average</h3>
@@ -93,8 +152,13 @@ export default function SleepDashboard() {
           <div className="mt-4 pt-4 border-t">
             <h3 className="text-lg font-semibold">Sleep Quality</h3>
             <div className="flex items-center gap-2">
-              <Progress value={sleepQuality} className="h-2 bg-gray-200" />
-              <span className="text-sm font-medium">{sleepQuality}%</span>
+              <Progress
+                value={currentSleepData.sleepQuality}
+                className="h-2 bg-gray-200"
+              />
+              <span className="text-sm font-medium">
+                {currentSleepData.sleepQuality}%
+              </span>
             </div>
           </div>
         </CardContent>
@@ -104,47 +168,78 @@ export default function SleepDashboard() {
       <Card>
         <CardContent>
           <h2 className="text-xl font-semibold mb-4">Sleep Phases</h2>
-          
+
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Deep Sleep ({sleepPhases.deep}h)</span>
+                <span className="text-sm font-medium">
+                  Deep Sleep ({currentSleepData.phases.deep}h)
+                </span>
                 <span className="text-sm text-gray-500">
-                  {Math.round((sleepPhases.deep / currentSleep) * 100)}%
+                  {Math.round(
+                    (currentSleepData.phases.deep /
+                      currentSleepData.totalSleep) *
+                      100
+                  )}
+                  %
                 </span>
               </div>
-              <Progress 
-                value={(sleepPhases.deep / currentSleep) * 100} 
-                className="h-2 bg-gray-200" 
-                indicatorClassName="bg-blue-500" 
+              <Progress
+                value={
+                  (currentSleepData.phases.deep / currentSleepData.totalSleep) *
+                  100
+                }
+                className="h-2 bg-gray-200"
+                indicatorClassName="bg-blue-500"
               />
             </div>
 
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">REM ({sleepPhases.rem}h)</span>
+                <span className="text-sm font-medium">
+                  REM ({currentSleepData.phases.rem}h)
+                </span>
                 <span className="text-sm text-gray-500">
-                  {Math.round((sleepPhases.rem / currentSleep) * 100)}%
+                  {Math.round(
+                    (currentSleepData.phases.rem /
+                      currentSleepData.totalSleep) *
+                      100
+                  )}
+                  %
                 </span>
               </div>
-              <Progress 
-                value={(sleepPhases.rem / currentSleep) * 100} 
-                className="h-2 bg-gray-200" 
-                indicatorClassName="bg-purple-500" 
+              <Progress
+                value={
+                  (currentSleepData.phases.rem / currentSleepData.totalSleep) *
+                  100
+                }
+                className="h-2 bg-gray-200"
+                indicatorClassName="bg-purple-500"
               />
             </div>
 
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Light Sleep ({sleepPhases.light}h)</span>
+                <span className="text-sm font-medium">
+                  Light Sleep ({currentSleepData.phases.light}h)
+                </span>
                 <span className="text-sm text-gray-500">
-                  {Math.round((sleepPhases.light / currentSleep) * 100)}%
+                  {Math.round(
+                    (currentSleepData.phases.light /
+                      currentSleepData.totalSleep) *
+                      100
+                  )}
+                  %
                 </span>
               </div>
-              <Progress 
-                value={(sleepPhases.light / currentSleep) * 100} 
-                className="h-2 bg-gray-200" 
-                indicatorClassName="bg-green-500" 
+              <Progress
+                value={
+                  (currentSleepData.phases.light /
+                    currentSleepData.totalSleep) *
+                  100
+                }
+                className="h-2 bg-gray-200"
+                indicatorClassName="bg-green-500"
               />
             </div>
 
@@ -171,8 +266,13 @@ export default function SleepDashboard() {
               <input
                 type="time"
                 className="border p-2 w-full rounded"
-                value={bedtime}
-                onChange={(e) => setBedtime(e.target.value)}
+                value={currentSleepData.sleepTime}
+                onChange={(e) =>
+                  setCurrentSleepData({
+                    ...currentSleepData,
+                    sleepTime: e.target.value,
+                  })
+                }
               />
             </div>
             <div>
@@ -182,8 +282,13 @@ export default function SleepDashboard() {
               <input
                 type="time"
                 className="border p-2 w-full rounded"
-                value={wakeTime}
-                onChange={(e) => setWakeTime(e.target.value)}
+                value={currentSleepData.wakeTime}
+                onChange={(e) =>
+                  setCurrentSleepData({
+                    ...currentSleepData,
+                    wakeTime: e.target.value,
+                  })
+                }
               />
             </div>
             <div>
@@ -207,18 +312,20 @@ export default function SleepDashboard() {
       {/* Sleep Duration Trend */}
       <Card className="col-span-1 md:col-span-2">
         <CardContent>
-          <h2 className="text-xl font-semibold mb-2">Sleep Duration Trend (Last 7 Days)</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            Sleep Duration Trend (Last 7 Days)
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={sampleData}>
               <XAxis dataKey="day" />
               <YAxis domain={[4, 12]} />
               <Tooltip />
               <CartesianGrid strokeDasharray="3 3" />
-              <Line 
-                type="monotone" 
-                dataKey="totalSleep" 
-                stroke="#4F46E5" 
-                strokeWidth={2} 
+              <Line
+                type="monotone"
+                dataKey="totalSleep"
+                stroke="#4F46E5"
+                strokeWidth={2}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -228,11 +335,7 @@ export default function SleepDashboard() {
       {/* Calendar */}
       <Card>
         <CardContent>
-          <Calendar 
-            mode="month" 
-            selected={selectedDate} 
-            onSelect={(date) => setSelectedDate(date)} 
-          />
+          <Calendar selected={selectedDate} onSelect={handleDateSelect} />
         </CardContent>
       </Card>
     </div>

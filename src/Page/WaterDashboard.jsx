@@ -33,6 +33,13 @@ const generateDummyWaterData = () => {
   months.forEach((month) => {
     data[month] = Array.from({ length: 30 }, (_, day) => ({
       day: `Day ${day + 1}`,
+      date: new Date(2025, months.indexOf(month), day + 1).toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+        }
+      ),
       ounces: Math.floor(Math.random() * 80) + 20, // Random water intake between 20-100 ounces
     }));
   });
@@ -51,19 +58,88 @@ export default function WaterIntakeDashboard() {
   const [goal, setGoal] = useState(64); // Default goal: 64 ounces (8 cups)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [weeklyData, setWeeklyData] = useState([]);
-  const [dailyIntake, setDailyIntake] = useState(32);
-  const [monthlyAverage, setMonthlyAverage] = useState(48);
+  const [dailyIntake, setDailyIntake] = useState(0);
+  const [monthlyAverage, setMonthlyAverage] = useState(0);
+  const [sensorData, setSensorData] = useState([]);
+
+  useEffect(() => {
+    const fetchSensorData = async () => {
+      try {
+        const response = await fetch(
+          "https://swwhgf14g7.execute-api.ap-south-1.amazonaws.com/getWaterData"
+        );
+        const data = await response.json();
+
+        if (!data || !data.water_data || data.water_data.length === 0) {
+          throw new Error("No water data available.");
+        }
+
+        setSensorData(data.water_data);
+      } catch (error) {
+        console.error("Error fetching water data:", error);
+      }
+    };
+
+    fetchSensorData();
+  }, []);
 
   useEffect(() => {
     const month = selectedDate.toLocaleString("default", { month: "short" });
     const monthData = dummyWaterData[month] || [];
+
+    // Get data for the specific selected day
+    const dayIndex = selectedDate.getDate() - 1;
+    const dayData =
+      dayIndex >= 0 && dayIndex < monthData.length ? monthData[dayIndex] : null;
+
+    // Get week data for the chart
     const weekData = getWeekData(selectedDate, monthData);
     setWeeklyData(weekData);
-    setDailyIntake(monthData[selectedDate.getDate() - 1]?.ounces || 0);
+
+    // Update water intake for the selected day
+    if (dayData) {
+      setDailyIntake(dayData.ounces);
+    }
+
+    // Calculate monthly average
     setMonthlyAverage(
       monthData.reduce((sum, entry) => sum + entry.ounces, 0) / monthData.length
     );
-  }, [selectedDate]);
+
+    // If we have sensor data, try to use it
+    if (sensorData.length > 0) {
+      const formattedDate = selectedDate
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+        .replace(/\//g, "-");
+
+      const intake = sumWaterForDate(sensorData, formattedDate);
+      if (intake > 0) {
+        setDailyIntake(intake);
+      }
+    }
+  }, [selectedDate, sensorData]);
+
+  function sumWaterForDate(sensorData, targetDate) {
+    if (!sensorData.length) return 0;
+
+    // Sum water intake for the given target date, ensuring intake exists
+    let totalIntake = sensorData.reduce((sum, data) => {
+      let currentDate = data.DateTime.split(" ")[0];
+      return currentDate === targetDate && data.WaterIntake !== undefined
+        ? sum + data.WaterIntake
+        : sum;
+    }, 0);
+
+    return totalIntake;
+  }
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+  };
 
   // Convert ounces to cups for display
   const ouncesToCups = (ounces) => {
@@ -71,11 +147,17 @@ export default function WaterIntakeDashboard() {
   };
 
   return (
-    <div className="p-6 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <div className="p-6 sm:px-20 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {/* Daily Water Intake */}
       <Card>
         <CardContent>
-          <h2 className="text-xl font-semibold">Daily Water Intake</h2>
+          <h2 className="text-xl font-semibold">
+            Daily Water Intake for{" "}
+            {selectedDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })}
+          </h2>
           <p className="text-3xl font-bold">{dailyIntake} oz</p>
           <p className="text-lg">{ouncesToCups(dailyIntake)} cups</p>
           <Progress value={(dailyIntake / goal) * 100} className="mt-2" />
@@ -144,11 +226,7 @@ export default function WaterIntakeDashboard() {
       {/* Calendar */}
       <Card>
         <CardContent>
-          <Calendar
-            mode="month"
-            value={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-          />
+          <Calendar selected={selectedDate} onSelect={handleDateSelect} />
         </CardContent>
       </Card>
 

@@ -161,7 +161,7 @@ const HealthTrackersInTwoColumns = () => {
       icon: TrackerIcons.water,
       title: "Water Tracker",
       description: "Track your daily water intake",
-      path: "/water",
+      path: "/waterdashboard",
     },
     {
       icon: TrackerIcons.weight,

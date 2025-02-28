@@ -8,12 +8,10 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-// import { Card, CardContent } from "@/components/ui/card";
-// import { Calendar } from "@/components/ui/calendar";
-// import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "../components/ui/Card.jsx";
 import { Progress } from "../components/ui/Progress.jsx";
 import { Calendar } from "../components/ui/Calendar.jsx";
+
 const generateDummyData = () => {
   const months = [
     "Jan",
@@ -65,39 +63,65 @@ const getWeekData = (selectedDate, monthData) => {
 
 export default function CalorieDashboard() {
   const [targetCalories, setTargetCalories] = useState(2000);
-  const [currentCalories, setCurrentCalories] = useState(1850);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [sampleData, setSampleData] = useState([]);
   const [monthlyAverage, setMonthlyAverage] = useState(1950);
-  const [macros, setMacros] = useState({
-    protein: 140,
-    carbs: 210,
-    fat: 65,
+  const [calorieData, setCalorieData] = useState({
+    calories: 1850,
+    macros: {
+      protein: 140,
+      carbs: 210,
+      fat: 65,
+    },
   });
 
   useEffect(() => {
     const month = selectedDate.toLocaleString("default", { month: "short" });
     const monthData = dummyData[month] || [];
+
+    // Get data for the specific selected day
+    const dayIndex = selectedDate.getDate() - 1;
+    const dayData =
+      dayIndex >= 0 && dayIndex < monthData.length ? monthData[dayIndex] : null;
+
+    // Get week data for the chart
     const weekData = getWeekData(selectedDate, monthData);
     setSampleData(weekData);
+
+    // Calculate monthly average
     setMonthlyAverage(
       Math.round(
         monthData.reduce((sum, entry) => sum + entry.calories, 0) /
           monthData.length
       )
     );
-    if (weekData.length > 0) {
-      setMacros(weekData[weekData.length - 1].macros);
+
+    // Update calorie data for the selected day
+    if (dayData) {
+      setCalorieData({
+        calories: dayData.calories,
+        macros: dayData.macros,
+      });
     }
   }, [selectedDate]);
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
     <div className="p-6 sm:px-20 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {/* Current Calories & Monthly Average */}
       <Card>
         <CardContent>
-          <h2 className="text-xl font-semibold">Current Daily Calories</h2>
-          <p className="text-3xl font-bold">{currentCalories} kcal</p>
+          <h2 className="text-xl font-semibold">
+            Calories for{" "}
+            {selectedDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            })}
+          </h2>
+          <p className="text-3xl font-bold">{calorieData.calories} kcal</p>
           <p className="text-sm text-gray-500">Target: {targetCalories} kcal</p>
           <div className="mt-4 pt-4 border-t">
             <h3 className="text-lg font-semibold">Monthly Average</h3>
@@ -115,7 +139,7 @@ export default function CalorieDashboard() {
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-sm font-medium">
-                  Protein ({macros.protein}g)
+                  Protein ({calorieData.macros.protein}g)
                 </span>
                 <span className="text-sm text-gray-500">30%</span>
               </div>
@@ -129,7 +153,7 @@ export default function CalorieDashboard() {
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-sm font-medium">
-                  Carbs ({macros.carbs}g)
+                  Carbs ({calorieData.macros.carbs}g)
                 </span>
                 <span className="text-sm text-gray-500">45%</span>
               </div>
@@ -142,7 +166,9 @@ export default function CalorieDashboard() {
 
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Fat ({macros.fat}g)</span>
+                <span className="text-sm font-medium">
+                  Fat ({calorieData.macros.fat}g)
+                </span>
                 <span className="text-sm text-gray-500">25%</span>
               </div>
               <Progress
@@ -189,8 +215,13 @@ export default function CalorieDashboard() {
                 type="number"
                 step="50"
                 className="border p-2 w-full rounded"
-                value={currentCalories}
-                onChange={(e) => setCurrentCalories(Number(e.target.value))}
+                value={calorieData.calories}
+                onChange={(e) =>
+                  setCalorieData({
+                    ...calorieData,
+                    calories: Number(e.target.value),
+                  })
+                }
                 placeholder="Enter current calories"
               />
             </div>
@@ -224,11 +255,7 @@ export default function CalorieDashboard() {
       {/* Calendar */}
       <Card>
         <CardContent>
-          <Calendar
-            mode="month"
-            selected={selectedDate}
-            onSelect={(date) => setSelectedDate(date)}
-          />
+          <Calendar selected={selectedDate} onSelect={handleDateSelect} />
         </CardContent>
       </Card>
     </div>
