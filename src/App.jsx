@@ -5,7 +5,7 @@ import FitnessDashboard from "./Page/FitnessDashboard";
 import StepsDashboard from "./Page/StepsDashboard";
 import Navbar from "./components/Navbar";
 import axios from "axios";
-import ChatBot from "./components/chatbot";
+import ChatBot from "./components/ChatBot";
 
 // axios.defaults.baseURL =
 //   "http://localhost:4000/" || "https://health-tracker-backend-jet.vercel.app/";
