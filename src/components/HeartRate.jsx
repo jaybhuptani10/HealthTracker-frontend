@@ -27,13 +27,17 @@ const HeartRate = () => {
       if (result.sensor_data && Array.isArray(result.sensor_data)) {
         // Sort records by date (latest first)
         const sortedData = result.sensor_data.sort((a, b) => {
-          const dateA = new Date(
-            a.DateTime.split(" ")[0].split("-").reverse().join("-")
+          const dateTimeA = new Date(
+            a.DateTime.split(" ")[0].split("-").reverse().join("-") +
+            " " +
+            a.DateTime.split(" ")[1]
           );
-          const dateB = new Date(
-            b.DateTime.split(" ")[0].split("-").reverse().join("-")
+          const dateTimeB = new Date(
+            b.DateTime.split(" ")[0].split("-").reverse().join("-") +
+            " " +
+            b.DateTime.split(" ")[1]
           );
-          return dateB - dateA; // Sort in descending order
+          return dateTimeB - dateTimeA; // Sort in descending order
         });
 
         // Find the latest available date with pulse data
@@ -50,7 +54,7 @@ const HeartRate = () => {
           const filteredData = sortedData
             .filter(
               (record) =>
-                record.PulseRate > 0 &&
+                record.PulseRate > 35 &&
                 record.DateTime.includes(latestRecord.DateTime.split(" ")[0])
             )
             .map((record) => ({
